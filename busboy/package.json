@@ -1,31 +1,31 @@
 {
   "_args": [
     [
-      "busboy@0.3.1",
+      "busboy@0.2.14",
       "E:\\aaaaaaaaaaaaaaaaaaaCS\\node\\Hospital-Management-Using-NodeJs-Mysql-Express"
     ]
   ],
-  "_from": "busboy@0.3.1",
-  "_id": "busboy@0.3.1",
+  "_from": "busboy@0.2.14",
+  "_id": "busboy@0.2.14",
   "_inBundle": false,
-  "_integrity": "sha512-y7tTxhGKXcyBxRKAni+awqx8uqaJKrSFSNFSeRG5CsWNdmy2BIK+6VGWEW7TZnIO/533mtMEA4rOevQV815YJw==",
-  "_location": "/busboy",
+  "_integrity": "sha1-bCpiLvz0fFe7vh4qnDetNseSVFM=",
+  "_location": "/multer/busboy",
   "_phantomChildren": {},
   "_requested": {
     "type": "version",
     "registry": true,
-    "raw": "busboy@0.3.1",
+    "raw": "busboy@0.2.14",
     "name": "busboy",
     "escapedName": "busboy",
-    "rawSpec": "0.3.1",
+    "rawSpec": "0.2.14",
     "saveSpec": null,
-    "fetchSpec": "0.3.1"
+    "fetchSpec": "0.2.14"
   },
   "_requiredBy": [
-    "/express-fileupload"
+    "/multer"
   ],
-  "_resolved": "https://registry.npmjs.org/busboy/-/busboy-0.3.1.tgz",
-  "_spec": "0.3.1",
+  "_resolved": "https://registry.npmjs.org/busboy/-/busboy-0.2.14.tgz",
+  "_spec": "0.2.14",
   "_where": "E:\\aaaaaaaaaaaaaaaaaaaCS\\node\\Hospital-Management-Using-NodeJs-Mysql-Express",
   "author": {
     "name": "Brian White",
@@ -35,11 +35,12 @@
     "url": "https://github.com/mscdex/busboy/issues"
   },
   "dependencies": {
-    "dicer": "0.3.0"
+    "dicer": "0.2.5",
+    "readable-stream": "1.1.x"
   },
   "description": "A streaming parser for HTML form data for node.js",
   "engines": {
-    "node": ">=4.5.0"
+    "node": ">=0.8.0"
   },
   "homepage": "https://github.com/mscdex/busboy#readme",
   "keywords": [
@@ -63,5 +64,5 @@
   "scripts": {
     "test": "node test/test.js"
   },
-  "version": "0.3.1"
+  "version": "0.2.14"
 }
