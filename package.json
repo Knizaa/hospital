@@ -1,101 +1,107 @@
 {
   "_args": [
     [
-      "multer@1.4.2",
+      "validator@12.2.0",
       "E:\\aaaaaaaaaaaaaaaaaaaCS\\node\\Hospital-Management-Using-NodeJs-Mysql-Express"
     ]
   ],
-  "_from": "multer@1.4.2",
-  "_id": "multer@1.4.2",
+  "_from": "validator@12.2.0",
+  "_id": "validator@12.2.0",
   "_inBundle": false,
-  "_integrity": "sha512-xY8pX7V+ybyUpbYMxtjM9KAiD9ixtg5/JkeKUTD6xilfDv0vzzOFcCp4Ljb1UU3tSOM3VTZtKo63OmzOrGi3Cg==",
-  "_location": "/multer",
-  "_phantomChildren": {
-    "core-util-is": "1.0.2",
-    "inherits": "2.0.3",
-    "streamsearch": "0.1.2"
-  },
+  "_integrity": "sha512-jJfE/DW6tIK1Ek8nCfNFqt8Wb3nzMoAbocBF6/Icgg1ZFSBpObdnwVY2jQj6qUqzhx5jc71fpvBWyLGO7Xl+nQ==",
+  "_location": "/validator",
+  "_phantomChildren": {},
   "_requested": {
     "type": "version",
     "registry": true,
-    "raw": "multer@1.4.2",
-    "name": "multer",
-    "escapedName": "multer",
-    "rawSpec": "1.4.2",
+    "raw": "validator@12.2.0",
+    "name": "validator",
+    "escapedName": "validator",
+    "rawSpec": "12.2.0",
     "saveSpec": null,
-    "fetchSpec": "1.4.2"
+    "fetchSpec": "12.2.0"
   },
   "_requiredBy": [
-    "/"
+    "/express-validator"
   ],
-  "_resolved": "https://registry.npmjs.org/multer/-/multer-1.4.2.tgz",
-  "_spec": "1.4.2",
+  "_resolved": "https://registry.npmjs.org/validator/-/validator-12.2.0.tgz",
+  "_spec": "12.2.0",
   "_where": "E:\\aaaaaaaaaaaaaaaaaaaCS\\node\\Hospital-Management-Using-NodeJs-Mysql-Express",
+  "author": {
+    "name": "Chris O'Hara",
+    "email": "cohara87@gmail.com"
+  },
   "bugs": {
-    "url": "https://github.com/expressjs/multer/issues"
+    "url": "https://github.com/chriso/validator.js/issues"
   },
   "contributors": [
     {
-      "name": "Hage Yaapa",
-      "email": "captain@hacksparrow.com",
-      "url": "http://www.hacksparrow.com"
-    },
-    {
-      "name": "Jaret Pfluger",
-      "email": "https://github.com/jpfluger"
-    },
-    {
-      "name": "Linus Unnebäck",
-      "email": "linus@folkdatorn.se"
+      "name": "Anthony Nandaa",
+      "url": "https://github.com/profnandaa"
     }
   ],
-  "dependencies": {
-    "append-field": "^1.0.0",
-    "busboy": "^0.2.11",
-    "concat-stream": "^1.5.2",
-    "mkdirp": "^0.5.1",
-    "object-assign": "^4.1.1",
-    "on-finished": "^2.3.0",
-    "type-is": "^1.6.4",
-    "xtend": "^4.0.0"
-  },
-  "description": "Middleware for handling `multipart/form-data`.",
+  "description": "String validation and sanitization",
   "devDependencies": {
-    "express": "^4.13.1",
-    "form-data": "^1.0.0-rc1",
-    "fs-temp": "^1.1.2",
-    "mocha": "^3.5.3",
-    "rimraf": "^2.4.1",
-    "standard": "^11.0.1",
-    "testdata-w3c-json-form": "^1.0.0"
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/register": "^7.0.0",
+    "babel-eslint": "^10.0.1",
+    "babel-plugin-add-module-exports": "^1.0.0",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.11.0",
+    "mocha": "^5.1.1",
+    "nyc": "^14.1.0",
+    "rollup": "^0.43.0",
+    "rollup-plugin-babel": "^4.0.1",
+    "uglify-js": "^3.0.19"
   },
   "engines": {
-    "node": ">= 0.10.0"
+    "node": ">= 0.10"
   },
   "files": [
-    "LICENSE",
     "index.js",
-    "storage/",
-    "lib/"
+    "es",
+    "lib",
+    "README.md",
+    "LICENCE",
+    "validator.js",
+    "validator.min.js"
   ],
-  "homepage": "https://github.com/expressjs/multer#readme",
+  "homepage": "https://github.com/chriso/validator.js",
   "keywords": [
-    "form",
-    "post",
-    "multipart",
-    "form-data",
-    "formdata",
-    "express",
-    "middleware"
+    "validator",
+    "validation",
+    "validate",
+    "sanitization",
+    "sanitize",
+    "sanitisation",
+    "sanitise",
+    "assert"
   ],
   "license": "MIT",
-  "name": "multer",
+  "main": "index.js",
+  "name": "validator",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/expressjs/multer.git"
+    "url": "git+https://github.com/chriso/validator.js.git"
   },
   "scripts": {
-    "test": "standard && mocha"
+    "build": "npm run build:browser && npm run build:node && npm run build:es",
+    "build:browser": "node --require @babel/register build-browser && npm run minify",
+    "build:es": "babel src -d es --env-name=es",
+    "build:node": "babel src -d .",
+    "clean": "npm run clean:node && npm run clean:browser && npm run clean:es",
+    "clean:browser": "rm -rf validator*.js",
+    "clean:es": "rm -rf es",
+    "clean:node": "rm -rf index.js lib",
+    "lint": "eslint src test",
+    "lint:fix": "eslint --fix src test",
+    "minify": "uglifyjs validator.js -o validator.min.js  --compress --mangle --comments /Copyright/",
+    "pretest": "npm run lint && npm run build",
+    "test": "nyc mocha --require @babel/register --reporter dot"
   },
-  "version": "1.4.2"
+  "sideEffects": false,
+  "version": "12.2.0"
 }

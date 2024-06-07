@@ -1,299 +1,246 @@
-# Multer [![Build Status](https://travis-ci.org/expressjs/multer.svg?branch=master)](https://travis-ci.org/expressjs/multer) [![NPM version](https://badge.fury.io/js/multer.svg)](https://badge.fury.io/js/multer) [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)
+# validator.js
 
-Multer is a node.js middleware for handling `multipart/form-data`, which is primarily used for uploading files. It is written
-on top of [busboy](https://github.com/mscdex/busboy) for maximum efficiency.
+[![NPM version][npm-image]][npm-url]
+[![Build Status](https://travis-ci.org/validatorjs/validator.js.svg?branch=master)](https://travis-ci.org/validatorjs/validator.js)
+[![Downloads][downloads-image]][npm-url]
+[![Backers on Open Collective](https://opencollective.com/validatorjs/backers/badge.svg)](#backers)
+[![Sponsors on Open Collective](https://opencollective.com/validatorjs/sponsors/badge.svg)](#sponsors)
 
-**NOTE**: Multer will not process any form which is not multipart (`multipart/form-data`).
+A library of string validators and sanitizers.
 
-## Translations 
+## Strings only
 
-This README is also available in other languages:
+**This library validates and sanitizes strings only.**
 
-- [简体中文](https://github.com/expressjs/multer/blob/master/doc/README-zh-cn.md) (Chinese)
-- [한국어](https://github.com/expressjs/multer/blob/master/doc/README-ko.md) (Korean)
-- [Русский язык](https://github.com/expressjs/multer/blob/master/doc/README-ru.md) (Russian)
+If you're not sure if your input is a string, coerce it using `input + ''`.
+Passing anything other than a string is an error.
 
-## Installation
+## Installation and Usage
 
-```sh
-$ npm install --save multer
+### Server-side usage
+
+Install the library with `npm install validator`
+
+#### No ES6
+
+```javascript
+var validator = require('validator');
+
+validator.isEmail('foo@bar.com'); //=> true
 ```
 
-## Usage
+#### ES6
 
-Multer adds a `body` object and a `file` or `files` object to the `request` object. The `body` object contains the values of the text fields of the form, the `file` or `files` object contains the files uploaded via the form.
+```javascript
+import validator from 'validator';
+```
 
-Basic usage example:
+Or, import only a subset of the library:
 
-Don't forget the `enctype="multipart/form-data"` in your form.
+```javascript
+import isEmail from 'validator/lib/isEmail';
+```
+
+#### Tree-shakeable ES imports
+
+```javascript
+import isEmail from 'validator/es/lib/isEmail';
+```
+
+### Client-side usage
+
+The library can be loaded either as a standalone script, or through an [AMD][amd]-compatible loader
 
 ```html
-<form action="/profile" method="post" enctype="multipart/form-data">
-  <input type="file" name="avatar" />
-</form>
+<script type="text/javascript" src="validator.min.js"></script>
+<script type="text/javascript">
+  validator.isEmail('foo@bar.com'); //=> true
+</script>
 ```
 
-```javascript
-var express = require('express')
-var multer  = require('multer')
-var upload = multer({ dest: 'uploads/' })
+The library can also be installed through [bower][bower]
 
-var app = express()
-
-app.post('/profile', upload.single('avatar'), function (req, res, next) {
-  // req.file is the `avatar` file
-  // req.body will hold the text fields, if there were any
-})
-
-app.post('/photos/upload', upload.array('photos', 12), function (req, res, next) {
-  // req.files is array of `photos` files
-  // req.body will contain the text fields, if there were any
-})
-
-var cpUpload = upload.fields([{ name: 'avatar', maxCount: 1 }, { name: 'gallery', maxCount: 8 }])
-app.post('/cool-profile', cpUpload, function (req, res, next) {
-  // req.files is an object (String -> Array) where fieldname is the key, and the value is array of files
-  //
-  // e.g.
-  //  req.files['avatar'][0] -> File
-  //  req.files['gallery'] -> Array
-  //
-  // req.body will contain the text fields, if there were any
-})
+```bash
+$ bower install validator-js
 ```
 
-In case you need to handle a text-only multipart form, you should use the `.none()` method:
+## Contributors
 
-```javascript
-var express = require('express')
-var app = express()
-var multer  = require('multer')
-var upload = multer()
+[Become a backer](https://opencollective.com/validatorjs#backer)
 
-app.post('/profile', upload.none(), function (req, res, next) {
-  // req.body contains the text fields
-})
+[Become a sponsor](https://opencollective.com/validatorjs#sponsor)
+
+Thank you to the people who have already contributed:
+
+<a href="https://github.com/validatorjs/validator.js/graphs/contributors"><img src="https://opencollective.com/validatorjs/contributors.svg?width=890" /></a>
+
+## Validators
+
+Here is a list of the validators currently available.
+
+Validator                               | Description
+--------------------------------------- | --------------------------------------
+***contains(str, seed)***               | check if the string contains the seed.
+**equals(str, comparison)**             | check if the string matches the comparison.
+**isAfter(str [, date])**               | check if the string is a date that's after the specified date (defaults to now).
+**isAlpha(str [, locale])**             | check if the string contains only letters (a-zA-Z).<br/><br/>Locale is one of `['ar', 'ar-AE', 'ar-BH', 'ar-DZ', 'ar-EG', 'ar-IQ', 'ar-JO', 'ar-KW', 'ar-LB', 'ar-LY', 'ar-MA', 'ar-QA', 'ar-QM', 'ar-SA', 'ar-SD', 'ar-SY', 'ar-TN', 'ar-YE', 'bg-BG', 'cs-CZ', 'da-DK', 'de-DE', 'el-GR', 'en-AU', 'en-GB', 'en-HK', 'en-IN', 'en-NZ', 'en-US', 'en-ZA', 'en-ZM', 'es-ES', 'fr-FR', 'fa-IR', 'he', 'hu-HU', 'it-IT', 'ku-IQ', 'nb-NO', 'nl-NL', 'nn-NO', 'pl-PL', 'pt-BR', 'pt-PT', 'ru-RU', 'sl-SI', 'sk-SK', 'sr-RS', 'sr-RS@latin', 'sv-SE', 'tr-TR', 'uk-UA']`) and defaults to `en-US`. Locale list is `validator.isAlphaLocales`.
+**isAlphanumeric(str [, locale])**      | check if the string contains only letters and numbers.<br/><br/>Locale is one of `['ar', 'ar-AE', 'ar-BH', 'ar-DZ', 'ar-EG', 'ar-IQ', 'ar-JO', 'ar-KW', 'ar-LB', 'ar-LY', 'ar-MA', 'ar-QA', 'ar-QM', 'ar-SA', 'ar-SD', 'ar-SY', 'ar-TN', 'ar-YE', 'bg-BG', 'cs-CZ', 'da-DK', 'de-DE', 'el-GR', 'en-AU', 'en-GB', 'en-HK', 'en-IN', 'en-NZ', 'en-US', 'en-ZA', 'en-ZM', 'es-ES', 'fr-FR', 'fa-IR', 'he', 'hu-HU', 'it-IT', 'ku-IQ', 'nb-NO', 'nl-NL', 'nn-NO', 'pl-PL', 'pt-BR', 'pt-PT', 'ru-RU', 'sl-SI', 'sk-SK', 'sr-RS', 'sr-RS@latin', 'sv-SE', 'tr-TR', 'uk-UA']`) and defaults to `en-US`. Locale list is `validator.isAlphanumericLocales`.
+**isAscii(str)**                        | check if the string contains ASCII chars only.
+**isBase32(str)**                       | check if a string is base32 encoded.
+**isBase64(str)**                       | check if a string is base64 encoded.
+**isBefore(str [, date])**              | check if the string is a date that's before the specified date.
+**isBIC(str)**                          | check if a string is a BIC (Bank Identification Code) or SWIFT code.
+**isBoolean(str)**                      | check if a string is a boolean.
+**isByteLength(str [, options])**          | check if the string's length (in UTF-8 bytes) falls in a range.<br/><br/>`options` is an object which defaults to `{min:0, max: undefined}`.
+**isCreditCard(str)**                   | check if the string is a credit card.
+**isCurrency(str [, options])**            | check if the string is a valid currency amount.<br/><br/>`options` is an object which defaults to `{symbol: '$', require_symbol: false, allow_space_after_symbol: false, symbol_after_digits: false, allow_negatives: true, parens_for_negatives: false, negative_sign_before_digits: false, negative_sign_after_digits: false, allow_negative_sign_placeholder: false, thousands_separator: ',', decimal_separator: '.', allow_decimal: true, require_decimal: false, digits_after_decimal: [2], allow_space_after_digits: false}`.<br/>**Note:** The array `digits_after_decimal` is filled with the exact number of digits allowed not a range, for example a range 1 to 3 will be given as [1, 2, 3].
+**isDataURI(str)**                      | check if the string is a [data uri format](https://developer.mozilla.org/en-US/docs/Web/HTTP/data_URIs).
+**isDecimal(str [, options])**             | check if the string represents a decimal number, such as 0.1, .3, 1.1, 1.00003, 4.0, etc.<br/><br/>`options` is an object which defaults to `{force_decimal: false, decimal_digits: '1,', locale: 'en-US'}`<br/><br/>`locale` determine the decimal separator and is one of `['ar', 'ar-AE', 'ar-BH', 'ar-DZ', 'ar-EG', 'ar-IQ', 'ar-JO', 'ar-KW', 'ar-LB', 'ar-LY', 'ar-MA', 'ar-QA', 'ar-QM', 'ar-SA', 'ar-SD', 'ar-SY', 'ar-TN', 'ar-YE', 'bg-BG', 'cs-CZ', 'da-DK', 'de-DE', 'en-AU', 'en-GB', 'en-HK', 'en-IN', 'en-NZ', 'en-US', 'en-ZA', 'en-ZM', 'es-ES', 'fr-FR', 'hu-HU', 'it-IT', 'ku-IQ', nb-NO', 'nl-NL', 'nn-NO', 'pl-PL', 'pt-BR', 'pt-PT', 'ru-RU', 'sl-SI', 'sr-RS', 'sr-RS@latin', 'sv-SE', 'tr-TR', 'uk-UA']`.<br/>**Note:** `decimal_digits` is given as a range like '1,3', a specific value like '3' or min like '1,'.
+**isDivisibleBy(str, number)**          | check if the string is a number that's divisible by another.
+**isEmail(str [, options])**            | check if the string is an email.<br/><br/>`options` is an object which defaults to `{ allow_display_name: false, require_display_name: false, allow_utf8_local_part: true, require_tld: true, allow_ip_domain: false, domain_specific_validation: false }`. If `allow_display_name` is set to true, the validator will also match `Display Name <email-address>`. If `require_display_name` is set to true, the validator will reject strings without the format `Display Name <email-address>`. If `allow_utf8_local_part` is set to false, the validator will not allow any non-English UTF8 character in email address' local part. If `require_tld` is set to false, e-mail addresses without having TLD in their domain will also be matched. If `ignore_max_length` is set to true, the validator will not check for the standard max length of an email. If `allow_ip_domain` is set to true, the validator will allow IP addresses in the host part. If `domain_specific_validation` is true, some additional validation will be enabled, e.g. disallowing certain syntactically valid email addresses that are rejected by GMail.
+**isEmpty(str [, options])**            | check if the string has a length of zero.<br/><br/>`options` is an object which defaults to `{ ignore_whitespace:false }`.
+**isFloat(str [, options])**            | check if the string is a float.<br/><br/>`options` is an object which can contain the keys `min`, `max`, `gt`, and/or `lt` to validate the float is within boundaries (e.g. `{ min: 7.22, max: 9.55 }`) it also has `locale` as an option.<br/><br/>`min` and `max` are equivalent to 'greater or equal' and 'less or equal', respectively while `gt` and `lt` are their strict counterparts.<br/><br/>`locale` determine the decimal separator and is one of `['ar', 'ar-AE', 'ar-BH', 'ar-DZ', 'ar-EG', 'ar-IQ', 'ar-JO', 'ar-KW', 'ar-LB', 'ar-LY', 'ar-MA', 'ar-QA', 'ar-QM', 'ar-SA', 'ar-SD', 'ar-SY', 'ar-TN', 'ar-YE', 'bg-BG', 'cs-CZ', 'da-DK', 'de-DE', 'en-AU', 'en-GB', 'en-HK', 'en-IN', 'en-NZ', 'en-US', 'en-ZA', 'en-ZM', 'es-ES', 'fr-FR', 'hu-HU', 'it-IT', 'nb-NO', 'nl-NL', 'nn-NO', 'pl-PL', 'pt-BR', 'pt-PT', 'ru-RU', 'sl-SI', 'sr-RS', 'sr-RS@latin', 'sv-SE', 'tr-TR', 'uk-UA']`. Locale list is `validator.isFloatLocales`.
+**isFQDN(str [, options])**             | check if the string is a fully qualified domain name (e.g. domain.com).<br/><br/>`options` is an object which defaults to `{ require_tld: true, allow_underscores: false, allow_trailing_dot: false }`.
+**isFullWidth(str)**                    | check if the string contains any full-width chars.
+**isHalfWidth(str)**                    | check if the string contains any half-width chars.
+**isHash(str, algorithm)**              | check if the string is a hash of type algorithm.<br/><br/>Algorithm is one of `['md4', 'md5', 'sha1', 'sha256', 'sha384', 'sha512', 'ripemd128', 'ripemd160', 'tiger128', 'tiger160', 'tiger192', 'crc32', 'crc32b']`
+**isHexadecimal(str)**                  | check if the string is a hexadecimal number.
+**isHexColor(str)**                     | check if the string is a hexadecimal color.
+**isIdentityCard(str [, locale])**      | check if the string is a valid identity card code.<br/><br/>`locale` is one of `['ES', 'zh-TW', 'he-IL']` OR `'any'`. If 'any' is used, function will check if any of the locals match.<br/><br/>Defaults to 'any'.
+**isIn(str, values)**                   | check if the string is in a array of allowed values.
+**isInt(str [, options])**              | check if the string is an integer.<br/><br/>`options` is an object which can contain the keys `min` and/or `max` to check the integer is within boundaries (e.g. `{ min: 10, max: 99 }`). `options` can also contain the key `allow_leading_zeroes`, which when set to false will disallow integer values with leading zeroes (e.g. `{ allow_leading_zeroes: false }`). Finally, `options` can contain the keys `gt` and/or `lt` which will enforce integers being greater than or less than, respectively, the value provided (e.g. `{gt: 1, lt: 4}` for a number between 1 and 4).
+**isIP(str [, version])**               | check if the string is an IP (version 4 or 6).
+**isIPRange(str)**                      | check if the string is an IP Range(version 4 only).
+**isISBN(str [, version])**             | check if the string is an ISBN (version 10 or 13).
+**isISIN(str)**                         | check if the string is an [ISIN][ISIN] (stock/security identifier).
+**isISO31661Alpha2(str)**               | check if the string is a valid [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) officially assigned country code.
+**isISO31661Alpha3(str)**               | check if the string is a valid [ISO 3166-1 alpha-3](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3) officially assigned country code.
+**isISO8601(str)**                      | check if the string is a valid [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) date; for additional checks for valid dates, e.g. invalidates dates like `2009-02-29`, pass `options` object as a second parameter with `options.strict = true`.
+**isISSN(str [, options])**             | check if the string is an [ISSN](https://en.wikipedia.org/wiki/International_Standard_Serial_Number).<br/><br/>`options` is an object which defaults to `{ case_sensitive: false, require_hyphen: false }`. If `case_sensitive` is true, ISSNs with a lowercase `'x'` as the check digit are rejected.
+**isISRC(str)**                         | check if the string is a [ISRC](https://en.wikipedia.org/wiki/International_Standard_Recording_Code).
+**isRFC3339(str)**                      | check if the string is a valid [RFC 3339](https://tools.ietf.org/html/rfc3339) date.
+**isJSON(str)**                         | check if the string is valid JSON (note: uses JSON.parse).
+**isJWT(str)**                         | check if the string is valid JWT token.
+**isLatLong(str)**                      | check if the string is a valid latitude-longitude coordinate in the format `lat,long` or `lat, long`.
+**isLength(str [, options])**              | check if the string's length falls in a range.<br/><br/>`options` is an object which defaults to `{min:0, max: undefined}`. Note: this function takes into account surrogate pairs.
+**isLowercase(str)**                    | check if the string is lowercase.
+**isMACAddress(str)**                   | check if the string is a MAC address.<br/><br/>`options` is an object which defaults to `{no_colons: false}`. If `no_colons` is true, the validator will allow MAC addresses without the colons. Also, it allows the use of hyphens or spaces e.g  '01 02 03 04 05 ab' or '01-02-03-04-05-ab'.
+**isMagnetURI(str)**                      | check if the string is a [magnet uri format](https://en.wikipedia.org/wiki/Magnet_URI_scheme).
+**isMD5(str)**                          | check if the string is a MD5 hash.
+**isMimeType(str)**                     | check if the string matches to a valid [MIME type](https://en.wikipedia.org/wiki/Media_type) format
+**isMobilePhone(str [, locale [, options]])**          | check if the string is a mobile phone number,<br/><br/>(locale is either an array of locales (e.g `['sk-SK', 'sr-RS']`) OR one of `['ar-AE', 'ar-BH', 'ar-DZ', 'ar-EG', 'ar-IQ', ar-JO', 'ar-KW', 'ar-SA', 'ar-SY', 'ar-TN', 'be-BY', 'bg-BG', 'bn-BD', 'cs-CZ', 'de-DE', 'de-AT', 'da-DK', 'el-GR', 'en-AU', 'en-CA', 'en-GB', 'en-GG', 'en-GH', 'en-HK', 'en-MO', 'en-IE', 'en-IN',  'en-KE', 'en-MT', 'en-MU', 'en-NG', 'en-NZ', 'en-RW', 'en-SG', 'en-UG', 'en-US', 'en-TZ', 'en-ZA', 'en-ZM', 'en-PK', 'es-EC', 'es-ES', 'es-MX', 'es-PA', 'es-PY', 'es-UY', 'et-EE', 'fa-IR', 'fi-FI', 'fj-FJ', 'fr-FR', 'fr-GF', 'fr-GP', 'fr-MQ', 'fr-RE', 'he-IL', 'hu-HU', 'id-ID', 'it-IT', 'ja-JP', 'kk-KZ', 'ko-KR', 'lt-LT', 'ms-MY', 'nb-NO', 'ne-NP', 'nl-BE', 'nl-NL', 'nn-NO', 'pl-PL', 'pt-PT', 'pt-BR', 'ro-RO', 'ru-RU', 'sl-SI', 'sk-SK', 'sr-RS', 'sv-SE', 'th-TH', 'tr-TR', 'uk-UA', 'vi-VN', 'zh-CN', 'zh-HK', 'zh-MO', 'zh-TW']` OR defaults to 'any'. If 'any' or a falsey value is used, function will check if any of the locales match).<br/><br/>`options` is an optional object that can be supplied with the following keys: `strictMode`, if this is set to `true`, the mobile phone number must be supplied with the country code and therefore must start with `+`. Locale list is `validator.isMobilePhoneLocales`.
+**isMongoId(str)**                      | check if the string is a valid hex-encoded representation of a [MongoDB ObjectId][mongoid].
+**isMultibyte(str)**                    | check if the string contains one or more multibyte chars.
+**isNumeric(str [, options])**                      | check if the string contains only numbers.<br/><br/>`options` is an object which defaults to `{no_symbols: false}`. If `no_symbols` is true, the validator will reject numeric strings that feature a symbol (e.g. `+`, `-`, or `.`).
+**isOctal(str)**                        | check if the string is a valid octal number.
+**isPort(str)**                         | check if the string is a valid port number.
+**isPostalCode(str, locale)**           | check if the string is a postal code,<br/><br/>(locale is one of `[ 'AD', 'AT', 'AU', 'BE', 'BG', 'BR', 'CA', 'CH', 'CZ', 'DE', 'DK', 'DZ', 'EE', 'ES', 'FI', 'FR', 'GB', 'GR', 'HR', 'HU', 'ID', 'IE' 'IL', 'IN', 'IR', 'IS', 'IT', 'JP', 'KE', 'LI', 'LT', 'LU', 'LV', 'MT', 'MX', 'NL', 'NO', 'NZ', 'PL', 'PR', 'PT', 'RO', 'RU', 'SA', 'SE', 'SI', 'TN', 'TW', 'UA', 'US', 'ZA', 'ZM' ]` OR 'any'. If 'any' is used, function will check if any of the locals match. Locale list is `validator.isPostalCodeLocales`.).
+**isSurrogatePair(str)**                | check if the string contains any surrogate pairs chars.
+**isURL(str [, options])**              | check if the string is an URL.<br/><br/>`options` is an object which defaults to `{ protocols: ['http','https','ftp'], require_tld: true, require_protocol: false, require_host: true, require_valid_protocol: true, allow_underscores: false, host_whitelist: false, host_blacklist: false, allow_trailing_dot: false, allow_protocol_relative_urls: false, disallow_auth: false }`.<br/><br/>require_protocol - if set as true isURL will return false if protocol is not present in the URL.<br/>require_valid_protocol - isURL will check if the URL's protocol is present in the protocols option.<br/>protocols - valid protocols can be modified with this option.<br/>require_host - if set as false isURL will not check if host is present in the URL.<br/>allow_protocol_relative_urls - if set as true protocol relative URLs will be allowed.
+**isUppercase(str)**                    | check if the string is uppercase.
+**isUUID(str [, version])**             | check if the string is a UUID (version 3, 4 or 5).
+**isVariableWidth(str)**                | check if the string contains a mixture of full and half-width chars.
+**isWhitelisted(str, chars)**           | checks characters if they appear in the whitelist.
+**matches(str, pattern [, modifiers])** | check if string matches the pattern.<br/><br/>Either `matches('foo', /foo/i)` or `matches('foo', 'foo', 'i')`.
+
+## Sanitizers
+
+Here is a list of the sanitizers currently available.
+
+Sanitizer                              | Description
+-------------------------------------- | -------------------------------
+**blacklist(input, chars)**            | remove characters that appear in the blacklist. The characters are used in a RegExp and so you will need to escape some chars, e.g. `blacklist(input, '\\[\\]')`.
+**escape(input)**                      | replace `<`, `>`, `&`, `'`, `"` and `/` with HTML entities.
+**unescape(input)**                    | replaces HTML encoded entities with `<`, `>`, `&`, `'`, `"` and `/`.
+**ltrim(input [, chars])**             | trim characters from the left-side of the input.
+**normalizeEmail(email [, options])**  | canonicalizes an email address. (This doesn't validate that the input is an email, if you want to validate the email use isEmail beforehand)<br/><br/>`options` is an object with the following keys and default values:<br/><ul><li>*all_lowercase: true* - Transforms the local part (before the @ symbol) of all email addresses to lowercase. Please note that this may violate RFC 5321, which gives providers the possibility to treat the local part of email addresses in a case sensitive way (although in practice most - yet not all - providers don't). The domain part of the email address is always lowercased, as it's case insensitive per RFC 1035.</li><li>*gmail_lowercase: true* - GMail addresses are known to be case-insensitive, so this switch allows lowercasing them even when *all_lowercase* is set to false. Please note that when *all_lowercase* is true, GMail addresses are lowercased regardless of the value of this setting.</li><li>*gmail_remove_dots: true*: Removes dots from the local part of the email address, as GMail ignores them (e.g. "john.doe" and "johndoe" are considered equal).</li><li>*gmail_remove_subaddress: true*: Normalizes addresses by removing "sub-addresses", which is the part following a "+" sign (e.g. "foo+bar@gmail.com" becomes "foo@gmail.com").</li><li>*gmail_convert_googlemaildotcom: true*: Converts addresses with domain @googlemail.com to @gmail.com, as they're equivalent.</li><li>*outlookdotcom_lowercase: true* - Outlook.com addresses (including Windows Live and Hotmail) are known to be case-insensitive, so this switch allows lowercasing them even when *all_lowercase* is set to false. Please note that when *all_lowercase* is true, Outlook.com addresses are lowercased regardless of the value of this setting.</li><li>*outlookdotcom_remove_subaddress: true*: Normalizes addresses by removing "sub-addresses", which is the part following a "+" sign (e.g. "foo+bar@outlook.com" becomes "foo@outlook.com").</li><li>*yahoo_lowercase: true* - Yahoo Mail addresses are known to be case-insensitive, so this switch allows lowercasing them even when *all_lowercase* is set to false. Please note that when *all_lowercase* is true, Yahoo Mail addresses are lowercased regardless of the value of this setting.</li><li>*yahoo_remove_subaddress: true*: Normalizes addresses by removing "sub-addresses", which is the part following a "-" sign (e.g. "foo-bar@yahoo.com" becomes "foo@yahoo.com").</li><li>*icloud_lowercase: true* - iCloud addresses (including MobileMe) are known to be case-insensitive, so this switch allows lowercasing them even when *all_lowercase* is set to false. Please note that when *all_lowercase* is true, iCloud addresses are lowercased regardless of the value of this setting.</li><li>*icloud_remove_subaddress: true*: Normalizes addresses by removing "sub-addresses", which is the part following a "+" sign (e.g. "foo+bar@icloud.com" becomes "foo@icloud.com").</li></ul>
+**rtrim(input [, chars])**             | trim characters from the right-side of the input.
+**stripLow(input [, keep_new_lines])** | remove characters with a numerical value < 32 and 127, mostly control characters. If `keep_new_lines` is `true`, newline characters are preserved (`\n` and `\r`, hex `0xA` and `0xD`). Unicode-safe in JavaScript.
+**toBoolean(input [, strict])**        | convert the input string to a boolean. Everything except for `'0'`, `'false'` and `''` returns `true`. In strict mode only `'1'` and `'true'` return `true`.
+**toDate(input)**                      | convert the input string to a date, or `null` if the input is not a date.
+**toFloat(input)**                     | convert the input string to a float, or `NaN` if the input is not a float.
+**toInt(input [, radix])**             | convert the input string to an integer, or `NaN` if the input is not an integer.
+**trim(input [, chars])**              | trim characters (whitespace by default) from both sides of the input.
+**whitelist(input, chars)**            | remove characters that do not appear in the whitelist. The characters are used in a RegExp and so you will need to escape some chars, e.g. `whitelist(input, '\\[\\]')`.
+**isSlug**                             | Check if the string is of type slug. `Options` allow a single hyphen between string. e.g. [`cn-cn`, `cn-c-c`]
+
+### XSS Sanitization
+
+XSS sanitization was removed from the library in [2d5d6999](https://github.com/chriso/validator.js/commit/2d5d6999541add350fb396ef02dc42ca3215049e).
+
+For an alternative, have a look at Yahoo's [xss-filters library](https://github.com/yahoo/xss-filters) or at [DOMPurify](https://github.com/cure53/DOMPurify).
+
+## Contributing
+
+In general, we follow the "fork-and-pull" Git workflow.
+
+1. Fork the repo on GitHub
+2. Clone the project to your own machine
+3. Work on your fork
+    1. Make your changes and additions
+        - Most of your changes should be focused on `src/` and `test/` folders and/or `README.md`. 
+        - Files such as `validator.js`, `validator.min.js` and files in `lib/` folder are autogenerated when running tests (`npm test`) and need not to be changed **manually**. 
+    2. Change or add tests if needed
+    3. Run tests and make sure they pass
+    4. Add changes to README.md if needed
+4. Commit changes to your own branch
+5. **Make sure** you merge the latest from "upstream" and resolve conflicts if there is any
+6. Repeat step 3(3) above
+7. Push your work back up to your fork
+8. Submit a Pull request so that we can review your changes
+
+## Tests
+
+Tests are using mocha, to run the tests use:
+
+```sh
+$ npm test
 ```
 
-## API
+## Maintainers
 
-### File information
+- [chriso](https://github.com/chriso) - **Chris O'Hara** (author)
+- [profnandaa](https://github.com/profnandaa) - **Anthony Nandaa**
 
-Each file contains the following information:
+## Reading
 
-Key | Description | Note
---- | --- | ---
-`fieldname` | Field name specified in the form |
-`originalname` | Name of the file on the user's computer |
-`encoding` | Encoding type of the file |
-`mimetype` | Mime type of the file |
-`size` | Size of the file in bytes |
-`destination` | The folder to which the file has been saved | `DiskStorage`
-`filename` | The name of the file within the `destination` | `DiskStorage`
-`path` | The full path to the uploaded file | `DiskStorage`
-`buffer` | A `Buffer` of the entire file | `MemoryStorage`
+Remember, validating can be troublesome sometimes. See [A list of articles about programming assumptions commonly made that aren't true](https://github.com/jameslk/awesome-falsehoods).
 
-### `multer(opts)`
+## License (MIT)
 
-Multer accepts an options object, the most basic of which is the `dest`
-property, which tells Multer where to upload the files. In case you omit the
-options object, the files will be kept in memory and never written to disk.
+```
+Copyright (c) 2018 Chris O'Hara <cohara87@gmail.com>
 
-By default, Multer will rename the files so as to avoid naming conflicts. The
-renaming function can be customized according to your needs.
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
 
-The following are the options that can be passed to Multer.
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
 
-Key | Description
---- | ---
-`dest` or `storage` | Where to store the files
-`fileFilter` | Function to control which files are accepted
-`limits` | Limits of the uploaded data
-`preservePath` | Keep the full path of files instead of just the base name
-
-In an average web app, only `dest` might be required, and configured as shown in
-the following example.
-
-```javascript
-var upload = multer({ dest: 'uploads/' })
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ```
 
-If you want more control over your uploads, you'll want to use the `storage`
-option instead of `dest`. Multer ships with storage engines `DiskStorage`
-and `MemoryStorage`; More engines are available from third parties.
+[downloads-image]: http://img.shields.io/npm/dm/validator.svg
 
-#### `.single(fieldname)`
+[npm-url]: https://npmjs.org/package/validator
+[npm-image]: http://img.shields.io/npm/v/validator.svg
 
-Accept a single file with the name `fieldname`. The single file will be stored
-in `req.file`.
+[travis-url]: https://travis-ci.org/chriso/validator.js
+[travis-image]: http://img.shields.io/travis/chriso/validator.js.svg
 
-#### `.array(fieldname[, maxCount])`
+[amd]: http://requirejs.org/docs/whyamd.html
+[bower]: http://bower.io/
 
-Accept an array of files, all with the name `fieldname`. Optionally error out if
-more than `maxCount` files are uploaded. The array of files will be stored in
-`req.files`.
-
-#### `.fields(fields)`
-
-Accept a mix of files, specified by `fields`. An object with arrays of files
-will be stored in `req.files`.
-
-`fields` should be an array of objects with `name` and optionally a `maxCount`.
-Example:
-
-```javascript
-[
-  { name: 'avatar', maxCount: 1 },
-  { name: 'gallery', maxCount: 8 }
-]
-```
-
-#### `.none()`
-
-Accept only text fields. If any file upload is made, error with code
-"LIMIT\_UNEXPECTED\_FILE" will be issued.
-
-#### `.any()`
-
-Accepts all files that comes over the wire. An array of files will be stored in
-`req.files`.
-
-**WARNING:** Make sure that you always handle the files that a user uploads.
-Never add multer as a global middleware since a malicious user could upload
-files to a route that you didn't anticipate. Only use this function on routes
-where you are handling the uploaded files.
-
-### `storage`
-
-#### `DiskStorage`
-
-The disk storage engine gives you full control on storing files to disk.
-
-```javascript
-var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, '/tmp/my-uploads')
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.fieldname + '-' + Date.now())
-  }
-})
-
-var upload = multer({ storage: storage })
-```
-
-There are two options available, `destination` and `filename`. They are both
-functions that determine where the file should be stored.
-
-`destination` is used to determine within which folder the uploaded files should
-be stored. This can also be given as a `string` (e.g. `'/tmp/uploads'`). If no
-`destination` is given, the operating system's default directory for temporary
-files is used.
-
-**Note:** You are responsible for creating the directory when providing
-`destination` as a function. When passing a string, multer will make sure that
-the directory is created for you.
-
-`filename` is used to determine what the file should be named inside the folder.
-If no `filename` is given, each file will be given a random name that doesn't
-include any file extension.
-
-**Note:** Multer will not append any file extension for you, your function
-should return a filename complete with an file extension.
-
-Each function gets passed both the request (`req`) and some information about
-the file (`file`) to aid with the decision.
-
-Note that `req.body` might not have been fully populated yet. It depends on the
-order that the client transmits fields and files to the server.
-
-#### `MemoryStorage`
-
-The memory storage engine stores the files in memory as `Buffer` objects. It
-doesn't have any options.
-
-```javascript
-var storage = multer.memoryStorage()
-var upload = multer({ storage: storage })
-```
-
-When using memory storage, the file info will contain a field called
-`buffer` that contains the entire file.
-
-**WARNING**: Uploading very large files, or relatively small files in large
-numbers very quickly, can cause your application to run out of memory when
-memory storage is used.
-
-### `limits`
-
-An object specifying the size limits of the following optional properties. Multer passes this object into busboy directly, and the details of the properties can be found on [busboy's page](https://github.com/mscdex/busboy#busboy-methods).
-
-The following integer values are available:
-
-Key | Description | Default
---- | --- | ---
-`fieldNameSize` | Max field name size | 100 bytes
-`fieldSize` | Max field value size (in bytes) | 1MB
-`fields` | Max number of non-file fields | Infinity
-`fileSize` | For multipart forms, the max file size (in bytes) | Infinity
-`files` | For multipart forms, the max number of file fields | Infinity
-`parts` | For multipart forms, the max number of parts (fields + files) | Infinity
-`headerPairs` | For multipart forms, the max number of header key=>value pairs to parse | 2000
-
-Specifying the limits can help protect your site against denial of service (DoS) attacks.
-
-### `fileFilter`
-
-Set this to a function to control which files should be uploaded and which
-should be skipped. The function should look like this:
-
-```javascript
-function fileFilter (req, file, cb) {
-
-  // The function should call `cb` with a boolean
-  // to indicate if the file should be accepted
-
-  // To reject this file pass `false`, like so:
-  cb(null, false)
-
-  // To accept the file pass `true`, like so:
-  cb(null, true)
-
-  // You can always pass an error if something goes wrong:
-  cb(new Error('I don\'t have a clue!'))
-
-}
-```
-
-## Error handling
-
-When encountering an error, Multer will delegate the error to Express. You can
-display a nice error page using [the standard express way](http://expressjs.com/guide/error-handling.html).
-
-If you want to catch errors specifically from Multer, you can call the
-middleware function by yourself. Also, if you want to catch only [the Multer errors](https://github.com/expressjs/multer/blob/master/lib/multer-error.js), you can use the `MulterError` class that is attached to the `multer` object itself (e.g. `err instanceof multer.MulterError`).
-
-```javascript
-var multer = require('multer')
-var upload = multer().single('avatar')
-
-app.post('/profile', function (req, res) {
-  upload(req, res, function (err) {
-    if (err instanceof multer.MulterError) {
-      // A Multer error occurred when uploading.
-    } else if (err) {
-      // An unknown error occurred when uploading.
-    }
-
-    // Everything went fine.
-  })
-})
-```
-
-## Custom storage engine
-
-For information on how to build your own storage engine, see [Multer Storage Engine](https://github.com/expressjs/multer/blob/master/StorageEngine.md).
-
-## License
-
-[MIT](LICENSE)
+[mongoid]: http://docs.mongodb.org/manual/reference/object-id/
+[ISIN]: https://en.wikipedia.org/wiki/International_Securities_Identification_Number
