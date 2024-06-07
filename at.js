@@ -1,5 +1,5 @@
 var convert = require('./convert'),
-    func = convert('filter', require('../filter'));
+    func = convert('at', require('../at'));
 
 func.placeholder = require('./placeholder');
 module.exports = func;
