@@ -1,5 +1,5 @@
 var convert = require('./convert'),
-    func = convert('forEach', require('../forEach'));
+    func = convert('invert', require('../invert'));
 
 func.placeholder = require('./placeholder');
 module.exports = func;

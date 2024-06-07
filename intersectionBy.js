@@ -1,5 +1,5 @@
 var convert = require('./convert'),
-    func = convert('forEach', require('../forEach'));
+    func = convert('intersectionBy', require('../intersectionBy'));
 
 func.placeholder = require('./placeholder');
 module.exports = func;

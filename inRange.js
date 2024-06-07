@@ -1,5 +1,5 @@
 var convert = require('./convert'),
-    func = convert('forEach', require('../forEach'));
+    func = convert('inRange', require('../inRange'));
 
 func.placeholder = require('./placeholder');
 module.exports = func;

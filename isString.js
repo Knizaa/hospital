@@ -1,5 +1,5 @@
 var convert = require('./convert'),
-    func = convert('forEach', require('../forEach'));
+    func = convert('isString', require('../isString'), require('./_falseOptions'));
 
 func.placeholder = require('./placeholder');
 module.exports = func;
