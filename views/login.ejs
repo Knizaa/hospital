@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+	<script src="https://cdn.jsdelivr.net/npm/promise-polyfill9/dist/polyfill.js"></script>
+	
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+		<link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.ico">
+		<link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
+    	<link rel="stylesheet" type="text/css" href="assets/css/font-awesome.min.css">
+    	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+    
+		<title>Login Form </title>
+		<!-- <style>
+		.login-form {
+			width: 300px;
+			margin: 0 auto;
+			font-family: Tahoma, Geneva, sans-serif;
+		}
+		.login-form h1 {
+			text-align: center;
+			color: #4d4d4d;
+			font-size: 24px;
+			padding: 20px 0 20px 0;
+		}
+		.login-form input[type="password"],
+		.login-form input[type="text"] {
+			width: 100%;
+			padding: 15px;
+			border: 1px solid #dddddd;
+			margin-bottom: 15px;
+			box-sizing:border-box;
+		}
+		.login-form input[type="submit"] {
+			width: 100%;
+			padding: 15px;
+			background-color: #535b63;
+			border: 0;
+			box-sizing: border-box;
+			cursor: pointer;
+			font-weight: bold;
+			color: #ffffff;
+		}
+		</style> -->
+	</head>
+	<body>
+		<div class="main-wrapper  account-wrapper">
+			<div class="account-page">
+				<div class="account-center">
+					<div class="account-box">
+						<form action="" method="Post" class="form-signin">
+							<div class="account-logo">
+								<a href="index-2.html"><img src="assets/img/logo-dark.png" alt=""></a>
+							</div>
+							<div class="form-group">
+								<label>Username</label>
+								<input type="text" class="form-control" name="username">
+							</div>
+							
+							<div class="form-group">
+								<label>Password</label>
+								<input type="password" class="form-control" name="password">
+							</div>
+							
+							<div class="form-group text-center">
+								<button class="btn btn-primary account-btn" onclick="click()" type="submit">Log In</button>
+							</div>
+							<script>
+								function click(){
+									swal ("You are logged in");
+								}
+							</script>
+							<div class="text-center login-link">
+								<a href="http://localhost:3000/Signup">Signup</a>
+								<br>
+								<a href="http://localhost:3000/resetpassword">Forget Password</a>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- <div class="login-form">
+			<h1>Login Form</h1>
+			<form action="" method="POST">
+				<input type="text" name="username" placeholder="Username" >
+				<input type="password" name="password" placeholder="Password" >
+				<input type="submit" value="Log In" onclick="click()">
+				<script>
+					function click(){
+						swal ("You are logged in");
+					}
+				</script>
+				<br>
+				<div>
+					<a href="/signup">Sign Up</a>
+					<br>
+					<br>
+					<a href="http://localhost:3000/resetpassword">Forget Password</a>
+				</div>
+				
+				
+			</form>
+		</div> -->
+		<!-- <div>
+			
+		</div> -->
+		<script src="assets/js/jquery-3.2.1.min.js"></script>
+		<script src="assets/js/popper.min.js"></script>
+    	<script src="assets/js/bootstrap.min.js"></script>
+    	<script src="assets/js/app.js"></script>
+		<!-- <script src="assets/js/jquery-3.2.1.min.js"></script> -->
+	</body>
+</html>
